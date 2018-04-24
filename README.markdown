@@ -87,6 +87,7 @@ Currently supported locales:
 * Turkish: `:tr`
 * German: `:de`
 * Indonesian: `:id`
+* Spanish: `:es`
 
 ## Benchmarks
 

@@ -26,6 +26,7 @@ module Humanize
 
     number = self
     sign = []
+
     if number.zero?
       return WORDS[locale][:zero]
     elsif number < 0
@@ -37,6 +38,7 @@ module Humanize
     human_ary = []
     iteration = 0
     use_and = false
+
     until number.zero?
       number, remainder = number.divmod(number_grouping)
       unless remainder.zero?
