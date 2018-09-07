@@ -1,13 +1,13 @@
 require 'bigdecimal'
+require_relative './humanize/cache_array/de'
+require_relative './humanize/cache_array/es'
 require_relative './humanize/cache'
 require_relative './humanize/lots'
 require_relative './humanize/words'
 
 module Humanize
-
   # Accommodate for large numbers
   # Big numbers are big: http://wiki.answers.com/Q/What_number_is_after_vigintillion&src=ansTT
-
 
   def humanize(locale: Humanize.config.default_locale,
                decimals_as: Humanize.config.decimals_as)
@@ -50,13 +50,15 @@ module Humanize
                         else
                           (use_and ? ' ' + WORDS[locale][:and] : WORDS[locale][:comma])
                         end
+
           human_ary << LOTS[locale][iteration] + conjunction
         end
 
-        unless exactly_one_thousand_in_french_or_turkish?(locale, remainder, human_ary)
+        unless exactly_one_thousand?(locale, remainder, human_ary)
           human_ary << SUB_ONE_GROUPING[locale][remainder]
         end
       end
+
       iteration = iteration.next
     end
 
@@ -100,14 +102,18 @@ module Humanize
 
 private
 
-  def exactly_one_thousand_in_french_or_turkish?(locale, remainder, human_ary)
+  # only in french, turkish or spanish
+  def exactly_one_thousand?(locale, remainder, human_ary)
     if remainder == 1
       if (thousand = human_ary.last.to_s.strip) == 'mille' && locale == :fr
         return true
       elsif thousand == 'bin' && locale == :tr
         return true
+      elsif thousand == 'mil' && locale == :es
+        return true
       end
     end
+
     return false
   end
 
@@ -119,7 +125,6 @@ private
     end
   end
 
-
   class Configuration
     attr_accessor :default_locale, :decimals_as
 
@@ -128,7 +133,6 @@ private
       @decimals_as = :digits
     end
   end
-
 end
 
 class Integer

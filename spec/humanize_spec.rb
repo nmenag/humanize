@@ -16,7 +16,6 @@ describe "Humanize" do
   end
 
   describe 'locale option' do
-
     it 'uses default locale' do
       Humanize.config.default_locale = :fr
       expect(42.humanize).to eql('quarante-deux')
@@ -24,13 +23,31 @@ describe "Humanize" do
 
     it 'uses locale passed as argument if given' do
       Humanize.config.default_locale = :en
-      expect(42.humanize(:locale => :fr)).to eql('quarante-deux')
+      expect(42.humanize(locale: :fr)).to eql('quarante-deux')
+    end
+
+    it 'uses locale passed as argument if given' do
+      Humanize.config.default_locale = :es
+      expect(42.humanize).to eql('cuarenta y dos')
+    end
+
+    describe 'spanish specific rules' do
+      it 'one thousand and two equals "mille deux"' do
+        expect(1_002.humanize(locale: :es)).to eql('mil dos')
+      end
+
+      it 'two thousand and one equals "deux mille un"' do
+        expect(2_001.humanize(locale: :es)).to eql('dos mil uno')
+      end
+
+      it 'ten thousand equals "dix mille"' do
+        expect(10_000.humanize(locale: :es)).to eql('diez mil')
+      end
     end
 
     describe 'french specific rules' do
-
       it 'one thousand and two equals "mille deux"' do
-        expect(1002.humanize(:locale => :fr)).to eql('mille deux')
+        expect(1002.humanize(locale: :fr)).to eql('mille deux')
       end
 
       it 'two thousand and one equals "deux mille un"' do
@@ -40,7 +57,6 @@ describe "Humanize" do
       it 'ten thousand equals "dix mille"' do
         expect(10000.humanize(:locale => :fr)).to eql('dix mille')
       end
-
     end
 
     describe 'turkish specific rules' do

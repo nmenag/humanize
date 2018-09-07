@@ -57,7 +57,7 @@ require 'humanize'
 
 ```ruby
 Humanize.configure do |config|
-  config.default_locale = :en  # [:en, :fr, :tr, :de, :id], default: :en
+  config.default_locale = :en  # [:en, :fr, :tr, :de, :id, :es], default: :en
   config.decimals_as = :digits # [:digits, :number], default: :digits
 end
 ```
